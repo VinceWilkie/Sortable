@@ -596,27 +596,44 @@
 					options = this.options,
 					ghostRect;
 
-				ghostEl = dragEl.cloneNode(true);
+				if (typeof this.options.helperElement === 'function') {
+					ghostEl = this.options.helperElement();
 
-				_toggleClass(ghostEl, options.ghostClass, false);
-				_toggleClass(ghostEl, options.fallbackClass, true);
-				_toggleClass(ghostEl, options.dragClass, true);
+					[
+						[ 'top', tapEvt.clientY - 14 ],
+						[ 'left', tapEvt.clientX - 14 ],
+						[ 'width', '14px' ],
+						[ 'height', '14px' ],
+						[ 'opacity', '0.8' ],
+						[ 'position', 'fixed' ],
+						[ 'zIndex', '100000' ],
+						[ 'pointerEvents', 'none']
+					].map(c => { _css(ghostEl, c[0], c[1]); });
 
-				_css(ghostEl, 'top', rect.top - parseInt(css.marginTop, 10));
-				_css(ghostEl, 'left', rect.left - parseInt(css.marginLeft, 10));
-				_css(ghostEl, 'width', rect.width);
-				_css(ghostEl, 'height', rect.height);
-				_css(ghostEl, 'opacity', '0.8');
-				_css(ghostEl, 'position', 'fixed');
-				_css(ghostEl, 'zIndex', '100000');
-				_css(ghostEl, 'pointerEvents', 'none');
+					options.fallbackOnBody && document.body.appendChild(ghostEl) || rootEl.appendChild(ghostEl);
+				} else {
+					ghostEl = dragEl.cloneNode(true);
 
-				options.fallbackOnBody && document.body.appendChild(ghostEl) || rootEl.appendChild(ghostEl);
+					_toggleClass(ghostEl, options.ghostClass, false);
+					_toggleClass(ghostEl, options.fallbackClass, true);
+					_toggleClass(ghostEl, options.dragClass, true);
 
-				// Fixing dimensions.
-				ghostRect = ghostEl.getBoundingClientRect();
-				_css(ghostEl, 'width', rect.width * 2 - ghostRect.width);
-				_css(ghostEl, 'height', rect.height * 2 - ghostRect.height);
+					_css(ghostEl, 'top', rect.top - parseInt(css.marginTop, 10));
+					_css(ghostEl, 'left', rect.left - parseInt(css.marginLeft, 10));
+					_css(ghostEl, 'width', rect.width);
+					_css(ghostEl, 'height', rect.height);
+					_css(ghostEl, 'opacity', '0.8');
+					_css(ghostEl, 'position', 'fixed');
+					_css(ghostEl, 'zIndex', '100000');
+					_css(ghostEl, 'pointerEvents', 'none');
+
+					options.fallbackOnBody && document.body.appendChild(ghostEl) || rootEl.appendChild(ghostEl);
+
+					// Fixing dimensions.
+					ghostRect = ghostEl.getBoundingClientRect();
+					_css(ghostEl, 'width', rect.width * 2 - ghostRect.width);
+					_css(ghostEl, 'height', rect.height * 2 - ghostRect.height);
+				}
 			}
 		},
 
