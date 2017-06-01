@@ -597,18 +597,7 @@
 					ghostRect;
 
 				if (typeof this.options.helperElement === 'function') {
-					ghostEl = this.options.helperElement();
-
-					[
-						[ 'top', tapEvt.clientY - 14 ],
-						[ 'left', tapEvt.clientX - 14 ],
-						[ 'width', '14px' ],
-						[ 'height', '14px' ],
-						[ 'opacity', '0.8' ],
-						[ 'position', 'fixed' ],
-						[ 'zIndex', '100000' ],
-						[ 'pointerEvents', 'none']
-					].map(c => { _css(ghostEl, c[0], c[1]); });
+					ghostEl = this.options.helperElement(tapEvt);
 
 					options.fallbackOnBody && document.body.appendChild(ghostEl) || rootEl.appendChild(ghostEl);
 				} else {
